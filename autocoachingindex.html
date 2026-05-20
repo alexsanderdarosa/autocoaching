@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autocoaching · Alex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul-royal: #0F05F1;
+    --azul-celeste: #23CCF3;
+    --azul-marinho: #001E61;
+    --verde: #7CF4A5;
+    --lilas: #B150C5;
+    --cinza: #D7D2CB;
+    --amarelo: #FFDA27;
+    --branco: #FFFFFF;
+    --preto: #0A0A14;
+
+    /* Light mode (default) */
+    --bg: #F7F8FC;
+    --bg-card: #FFFFFF;
+    --bg-soft: #EEF0F9;
+    --text-primary: var(--azul-marinho);
+    --text-secondary: #4A5078;
+    --text-muted: #8089A8;
+    --border: #E2E5F1;
+    --shadow: 0 4px 24px rgba(15, 5, 241, 0.06);
+    --shadow-hover: 0 8px 32px rgba(15, 5, 241, 0.12);
+  }
+
+  [data-theme="dark"] {
+    --bg: #07081A;
+    --bg-card: #0F1130;
+    --bg-soft: #161A40;
+    --text-primary: #FFFFFF;
+    --text-secondary: #B8BEDB;
+    --text-muted: #6B7299;
+    --border: #1F2454;
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 8px 32px rgba(15, 5, 241, 0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lato', 'Calibri', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: background 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Nav fixo ===== */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    transition: background 0.3s;
+  }
+
+  [data-theme="dark"] .nav {
+    background: rgba(7, 8, 26, 0.85);
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    background: var(--azul-royal);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-mark::after {
+    content: 'as';
+    transform: rotate(45deg);
+    color: white;
+    font-weight: 900;
+    font-size: 0.7rem;
+    letter-spacing: -0.05em;
+  }
+
+  .theme-toggle {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+    color: var(--text-primary);
+  }
+
+  .theme-toggle:hover {
+    background: var(--azul-royal);
+    color: white;
+    transform: scale(1.05);
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    padding: 9rem 2rem 5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 8rem;
+    right: 2rem;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--azul-celeste) 0%, transparent 70%);
+    opacity: 0.15;
+    border-radius: 50%;
+    filter: blur(40px);
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--azul-royal);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 2px;
+    background: var(--azul-royal);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+  }
+
+  .hero h1 .highlight {
+    color: var(--azul-royal);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+  }
+
+  .quote-box {
+    background: var(--bg-card);
+    border-left: 4px solid var(--amarelo);
+    padding: 1.5rem 2rem;
+    border-radius: 0 12px 12px 0;
+    box-shadow: var(--shadow);
+    max-width: 600px;
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+  }
+
+  .quote-box strong {
+    color: var(--azul-royal);
+    font-style: normal;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ===== Section base ===== */
+  section {
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+  }
+
+  .section-eyebrow {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--azul-royal);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+
+  .section-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-top: 1rem;
+    max-width: 700px;
+    font-weight: 300;
+  }
+
+  /* ===== Painel de Metas ===== */
+  .metas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .metas-grid { grid-template-columns: 1fr; }
+  }
+
+  .meta-card {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .meta-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-4px);
+  }
+
+  .meta-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--azul-royal), var(--azul-celeste));
+  }
+
+  .meta-card.meta-2::before {
+    background: linear-gradient(90deg, var(--azul-marinho), var(--lilas));
+  }
+
+  .meta-number {
+    font-size: 0.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .meta-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .meta-deadline {
+    display: inline-block;
+    background: var(--bg-soft);
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--azul-royal);
+    margin-bottom: 1.5rem;
+  }
+
+  .meta-quote {
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .progress-section {
+    margin-top: 2rem;
+  }
+
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .progress-bar {
+    height: 12px;
+    background: var(--bg-soft);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--azul-royal), var(--azul-celeste));
+    border-radius: 999px;
+    transition: width 1s ease;
+    position: relative;
+  }
+
+  .meta-card.meta-2 .progress-fill {
+    background: linear-gradient(90deg, var(--azul-marinho), var(--verde));
+  }
+
+  .progress-current {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 1rem;
+  }
+
+  .progress-now {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--azul-royal);
+    letter-spacing: -0.03em;
+  }
+
+  .meta-card.meta-2 .progress-now {
+    color: var(--azul-marinho);
+  }
+
+  .progress-target {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .progress-input {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .progress-input input {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-soft);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.95rem;
+  }
+
+  .progress-input input:focus {
+    outline: none;
+    border-color: var(--azul-royal);
+  }
+
+  .progress-input button {
+    padding: 0.6rem 1.25rem;
+    background: var(--azul-royal);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .progress-input button:hover {
+    background: var(--azul-marinho);
+    transform: scale(1.02);
+  }
+
+  /* ===== Por que importa ===== */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .why-card {
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .why-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .why-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 900;
+  }
+
+  .why-icon.c1 { background: rgba(15, 5, 241, 0.1); color: var(--azul-royal); }
+  .why-icon.c2 { background: rgba(124, 244, 165, 0.2); color: #10A04A; }
+  .why-icon.c3 { background: rgba(177, 80, 197, 0.15); color: var(--lilas); }
+  .why-icon.c4 { background: rgba(255, 218, 39, 0.2); color: #B8950A; }
+  .why-icon.c5 { background: rgba(35, 204, 243, 0.2); color: #0891B2; }
+  .why-icon.c6 { background: rgba(0, 30, 97, 0.1); color: var(--azul-marinho); }
+
+  [data-theme="dark"] .why-icon.c2 { color: var(--verde); }
+  [data-theme="dark"] .why-icon.c4 { color: var(--amarelo); }
+  [data-theme="dark"] .why-icon.c6 { color: var(--azul-celeste); }
+
+  .why-card h3 {
+    font-size: 1.1rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .why-card p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* ===== Comecar vs Parar ===== */
+  .action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .action-grid { grid-template-columns: 1fr; }
+  }
+
+  .action-card {
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .action-card.start {
+    border-left: 4px solid var(--verde);
+  }
+
+  .action-card.stop {
+    border-left: 4px solid #FF6B6B;
+  }
+
+  .action-card h3 {
+    font-size: 1.25rem;
+    font-weight: 900;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .action-card.start h3 { color: #0A8A3F; }
+  .action-card.stop h3 { color: #C13030; }
+
+  [data-theme="dark"] .action-card.start h3 { color: var(--verde); }
+  [data-theme="dark"] .action-card.stop h3 { color: #FF8585; }
+
+  .action-list {
+    list-style: none;
+  }
+
+  .action-list li {
+    padding: 0.65rem 0;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .action-list li:last-child { border-bottom: none; }
+
+  .action-list li::before {
+    flex-shrink: 0;
+    margin-top: 0.45rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    content: '';
+  }
+
+  .action-card.start .action-list li::before { background: var(--verde); }
+  .action-card.stop .action-list li::before { background: #FF6B6B; }
+
+  /* ===== Plano de treino ===== */
+  .treino-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 900px) {
+    .treino-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .treino-grid { grid-template-columns: 1fr; }
+  }
+
+  .treino-dia {
+    background: var(--bg-card);
+    padding: 1.25rem 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .treino-dia:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .treino-dia.rest {
+    background: var(--bg-soft);
+    opacity: 0.7;
+  }
+
+  .treino-dia-nome {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--azul-royal);
+    margin-bottom: 0.75rem;
+  }
+
+  .treino-dia.rest .treino-dia-nome {
+    color: var(--text-muted);
+  }
+
+  .treino-dia-foco {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+
+  .treino-dia-cardio {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-soft);
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 0.25rem;
+  }
+
+  .treino-dia.rest .treino-dia-foco {
+    color: var(--text-muted);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  /* ===== Habitos checklist ===== */
+  .habitos-container {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .habitos-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .habitos-progresso {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .habitos-progresso-num {
+    font-size: 1.5rem;
+    color: var(--azul-royal);
+    font-weight: 900;
+  }
+
+  .habitos-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .habito-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--bg-soft);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    border: 2px solid transparent;
+  }
+
+  .habito-item:hover {
+    border-color: var(--azul-celeste);
+  }
+
+  .habito-checkbox {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-card);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .habito-item.checked .habito-checkbox {
+    background: var(--azul-royal);
+    border-color: var(--azul-royal);
+  }
+
+  .habito-item.checked .habito-checkbox::after {
+    content: '✓';
+    color: white;
+    font-weight: 900;
+    font-size: 0.9rem;
+  }
+
+  .habito-texto {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+  }
+
+  .habito-item.checked .habito-texto {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+
+  .habitos-reset {
+    margin-top: 1.5rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 700;
+  }
+
+  .habitos-reset:hover {
+    border-color: var(--azul-royal);
+    color: var(--azul-royal);
+  }
+
+  /* ===== Marcos & Recompensas ===== */
+  .timeline {
+    position: relative;
+    padding: 1rem 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 31px;
+    top: 24px;
+    bottom: 24px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--verde), var(--azul-royal));
+  }
+
+  @media (max-width: 600px) {
+    .timeline::before { left: 24px; }
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .timeline-marker {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 3px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 900;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+  }
+
+  @media (max-width: 600px) {
+    .timeline-marker { width: 50px; height: 50px; font-size: 0.8rem; }
+  }
+
+  .timeline-item.done .timeline-marker {
+    background: var(--verde);
+    border-color: var(--verde);
+    color: var(--azul-marinho);
+  }
+
+  .timeline-item.current .timeline-marker {
+    background: var(--azul-royal);
+    border-color: var(--azul-royal);
+    color: white;
+    box-shadow: 0 0 0 6px rgba(15, 5, 241, 0.15);
+  }
+
+  .timeline-content {
+    flex: 1;
+    background: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .timeline-item.done .timeline-content {
+    border-color: var(--verde);
+  }
+
+  .timeline-item.current .timeline-content {
+    border-color: var(--azul-royal);
+    box-shadow: var(--shadow);
+  }
+
+  .timeline-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .timeline-status {
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+  }
+
+  .timeline-status.done {
+    background: var(--verde);
+    color: var(--azul-marinho);
+  }
+
+  .timeline-status.pending {
+    background: var(--bg-soft);
+    color: var(--text-muted);
+  }
+
+  .timeline-status.current {
+    background: var(--azul-royal);
+    color: white;
+  }
+
+  .timeline-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .timeline-content h4 {
+    font-size: 1.1rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .timeline-content p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .timeline-recompensa {
+    margin-top: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .recompensa-tag {
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: var(--bg-soft);
+    color: var(--text-secondary);
+  }
+
+  /* ===== Substituicoes ===== */
+  .swap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .swap-card {
+    background: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .swap-from {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem;
+    background: rgba(255, 107, 107, 0.08);
+    border-radius: 8px;
+    color: #C13030;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: line-through;
+  }
+
+  [data-theme="dark"] .swap-from {
+    color: #FF8585;
+  }
+
+  .swap-arrow {
+    color: var(--azul-royal);
+    font-size: 1.5rem;
+    font-weight: 900;
+  }
+
+  .swap-to {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem;
+    background: rgba(124, 244, 165, 0.15);
+    border-radius: 8px;
+    color: #0A8A3F;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  [data-theme="dark"] .swap-to {
+    color: var(--verde);
+  }
+
+  /* ===== Pessoas de apoio ===== */
+  .apoio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .apoio-card {
+    background: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .apoio-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .apoio-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--azul-royal);
+    color: white;
+    margin: 0 auto 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.25rem;
+  }
+
+  .apoio-card h4 {
+    font-weight: 900;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+  }
+
+  .apoio-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  /* ===== Futuro ===== */
+  .futuro {
+    background: linear-gradient(135deg, var(--azul-marinho) 0%, var(--azul-royal) 100%);
+    color: white;
+    padding: 5rem 2rem;
+    margin: 5rem 0 0;
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .futuro-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .futuro::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: var(--azul-celeste);
+    border-radius: 50%;
+    opacity: 0.15;
+    filter: blur(60px);
+  }
+
+  .futuro::after {
+    content: '';
+    position: absolute;
+    bottom: -100px;
+    left: -100px;
+    width: 300px;
+    height: 300px;
+    background: var(--lilas);
+    border-radius: 50%;
+    opacity: 0.15;
+    filter: blur(60px);
+  }
+
+  .futuro .section-eyebrow {
+    color: var(--azul-celeste);
+  }
+
+  .futuro .section-title {
+    color: white;
+  }
+
+  .futuro-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+
+  .futuro-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .futuro-card h3 {
+    font-size: 1.1rem;
+    font-weight: 900;
+    margin-bottom: 0.75rem;
+    color: var(--amarelo);
+  }
+
+  .futuro-card p {
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.7;
+    font-size: 0.95rem;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    padding: 3rem 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  footer strong {
+    color: var(--azul-royal);
+  }
+
+  /* ===== Indicadores Negocio ===== */
+  .indicadores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  .indicador {
+    background: var(--bg-card);
+    padding: 1.25rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .indicador:hover {
+    border-color: var(--azul-royal);
+    transform: translateY(-2px);
+  }
+
+  .indicador-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .indicador-nome {
+    font-weight: 900;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+  }
+
+  /* ===== Animacoes ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate {
+    animation: fadeUp 0.6s ease-out;
+  }
+
+  /* ===== Responsivo ===== */
+  @media (max-width: 768px) {
+    .nav { padding: 1rem; }
+    .hero { padding: 7rem 1.25rem 3rem; }
+    section { padding: 3rem 1.25rem; }
+    .futuro { padding: 4rem 1.25rem; }
+    .meta-card, .habitos-container { padding: 1.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== NAV ==================== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#topo" class="logo">
+      <span class="logo-mark"></span>
+      <span>Alex · Autocoaching</span>
+    </a>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema">
+      <span id="theme-icon">🌙</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<header class="hero" id="topo">
+  <div class="hero-eyebrow">Revisão Semanal · Compromisso pessoal</div>
+  <h1>Autocoaching<br><span class="highlight">do Alex.</span></h1>
+  <p class="hero-subtitle">Meu plano de vida, atualizado e revisado toda semana. Duas metas claras, hábitos firmes, marcos comemorados.</p>
+  <div class="quote-box">
+    <strong>Lei do Progresso</strong>
+    Foco nos hábitos, não nos resultados. Se eu fizer o básico, com frequência, vou ter o resultado que desejo.
+  </div>
+</header>
+
+<!-- ==================== PAINEL DE METAS ==================== -->
+<section id="metas">
+  <div class="section-header">
+    <div class="section-eyebrow">As duas metas</div>
+    <h2 class="section-title">Onde estou indo</h2>
+    <p class="section-subtitle">Tudo na minha rotina aponta pra esses dois números. Tudo.</p>
+  </div>
+
+  <div class="metas-grid">
+    <!-- Meta 1: Peso -->
+    <div class="meta-card meta-1">
+      <div class="meta-number">Meta 01</div>
+      <h3 class="meta-title">Chegar aos 90 kg</h3>
+      <div class="meta-deadline">📅 Até 30 de Junho de 2026</div>
+      <p class="meta-quote">"Vou atingir 90 kg de forma saudável e sustentável, mantendo energia, disposição e estética."</p>
+
+      <div class="progress-section">
+        <div class="progress-labels">
+          <span>100 kg</span>
+          <span>90 kg</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-peso" style="width: 30%;"></div>
+        </div>
+        <div class="progress-current">
+          <div>
+            <div class="progress-now"><span id="peso-atual">97</span> kg</div>
+          </div>
+          <div class="progress-target">faltam <span id="peso-falta">7</span> kg</div>
+        </div>
+        <div class="progress-input">
+          <input type="number" id="input-peso" placeholder="Atualizar peso (kg)" step="0.1" min="80" max="110">
+          <button onclick="atualizarPeso()">Salvar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meta 2: Renda -->
+    <div class="meta-card meta-2">
+      <div class="meta-number">Meta 02</div>
+      <h3 class="meta-title">Ganhar R$ 50.000/mês</h3>
+      <div class="meta-deadline">📅 Até Dezembro de 2026</div>
+      <p class="meta-quote">"Vou atingir o ganho líquido de R$ 50.000/mês de forma consistente, previsível e escalável."</p>
+
+      <div class="progress-section">
+        <div class="progress-labels">
+          <span>R$ 20k</span>
+          <span>R$ 50k</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-renda" style="width: 0%;"></div>
+        </div>
+        <div class="progress-current">
+          <div>
+            <div class="progress-now">R$ <span id="renda-atual">20</span>k</div>
+          </div>
+          <div class="progress-target">faltam R$ <span id="renda-falta">30</span>k</div>
+        </div>
+        <div class="progress-input">
+          <input type="number" id="input-renda" placeholder="Atualizar renda (R$)" step="500">
+          <button onclick="atualizarRenda()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== POR QUE IMPORTA ==================== -->
+<section id="motivos">
+  <div class="section-header">
+    <div class="section-eyebrow">Por que isso importa</div>
+    <h2 class="section-title">As razões que me movem</h2>
+  </div>
+
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon c1">👨‍👩‍👦</div>
+      <h3>Família</h3>
+      <p>Ser exemplo pro meu filho e pra Natali. Proporcionar a vida que sempre sonhei pra eles.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon c2">💪</div>
+      <h3>Autoconfiança</h3>
+      <p>Sentir orgulho ao me olhar no espelho. Usar as roupas que quero. Tirar a camiseta na praia sem vergonha.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon c3">🏠</div>
+      <h3>Liberdade</h3>
+      <p>Construir nossa casa na Garibaldina. Viajar pra onde quisermos. Não me limitar por causa de dinheiro.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon c4">⚡</div>
+      <h3>Energia & Foco</h3>
+      <p>Acordar cedo, treinar, render mais no trabalho. Mais disposição pra cuidar de quem eu amo.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon c5">🎯</div>
+      <h3>Disciplina</h3>
+      <p>Vencer essa batalha de anos. Provar pra mim mesmo que sou capaz. Não desistir desta vez.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon c6">🌱</div>
+      <h3>Propósito</h3>
+      <p>Fazer bom uso dos dons que Deus me deu. Inspirar minha equipe e quem trabalha comigo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== COMECAR vs PARAR ==================== -->
+<section id="acoes">
+  <div class="section-header">
+    <div class="section-eyebrow">Estratégia em duas colunas</div>
+    <h2 class="section-title">O que começar e o que parar</h2>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-card start">
+      <h3>✅ COMEÇAR a fazer</h3>
+      <ul class="action-list">
+        <li>Treinar 5x por semana sem falhar</li>
+        <li>Fazer 30 min de cardio em todos os treinos</li>
+        <li>Comer porções menores no almoço e nas festas</li>
+        <li>Beber muita água ao longo do dia</li>
+        <li>Dormir às 22:30 todos os dias</li>
+        <li>Deixar a mochila do treino pronta de noite</li>
+        <li>Ter clareza diária das minhas prioridades</li>
+        <li>Controle total dos números da Icehot</li>
+        <li>Ler o autocoaching semanalmente</li>
+      </ul>
+    </div>
+
+    <div class="action-card stop">
+      <h3>🛑 PARAR de fazer</h3>
+      <ul class="action-list">
+        <li>Doces todas as noites</li>
+        <li>Refrigerantes, salgadinhos e frituras</li>
+        <li>Pratos maiores do que meu corpo precisa</li>
+        <li>Faltar aos treinos</li>
+        <li>Trabalhar por trabalhar, sem foco</li>
+        <li>Aceitar reuniões que não são prioridade</li>
+        <li>Ter doces e bobagens em casa</li>
+        <li>Exageros nos finais de semana</li>
+        <li>Justificativas e desculpas</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PLANO DE TREINO ==================== -->
+<section id="treino">
+  <div class="section-header">
+    <div class="section-eyebrow">Semana de treino</div>
+    <h2 class="section-title">Meu plano da semana</h2>
+    <p class="section-subtitle">5 treinos firmes, 2 descansos estratégicos. Cardio em todo treino.</p>
+  </div>
+
+  <div class="treino-grid">
+    <div class="treino-dia">
+      <div class="treino-dia-nome">Seg</div>
+      <div class="treino-dia-foco">Peito · Tríceps · Ombro · Abdômen</div>
+      <span class="treino-dia-cardio">+30 min cardio</span>
+    </div>
+    <div class="treino-dia">
+      <div class="treino-dia-nome">Ter</div>
+      <div class="treino-dia-foco">Costas · Bíceps · Abdômen</div>
+      <span class="treino-dia-cardio">+30 min cardio</span>
+    </div>
+    <div class="treino-dia rest">
+      <div class="treino-dia-nome">Qua</div>
+      <div class="treino-dia-foco">Descanso</div>
+    </div>
+    <div class="treino-dia">
+      <div class="treino-dia-nome">Qui</div>
+      <div class="treino-dia-foco">Pernas · Abdômen</div>
+      <span class="treino-dia-cardio">+30 min cardio</span>
+    </div>
+    <div class="treino-dia">
+      <div class="treino-dia-nome">Sex</div>
+      <div class="treino-dia-foco">Peito · Costas · Ombro</div>
+      <span class="treino-dia-cardio">+ cardio</span>
+    </div>
+    <div class="treino-dia">
+      <div class="treino-dia-nome">Sáb</div>
+      <div class="treino-dia-foco">Bíceps · Tríceps · Perna</div>
+    </div>
+    <div class="treino-dia rest">
+      <div class="treino-dia-nome">Dom</div>
+      <div class="treino-dia-foco">Descanso</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== HABITOS DIARIOS ==================== -->
+<section id="habitos">
+  <div class="section-header">
+    <div class="section-eyebrow">Checklist diário</div>
+    <h2 class="section-title">Meus hábitos de hoje</h2>
+    <p class="section-subtitle">Marque o que cumpriu hoje. Os hábitos batem o resultado.</p>
+  </div>
+
+  <div class="habitos-container">
+    <div class="habitos-header">
+      <div class="habitos-progresso">
+        <span class="habitos-progresso-num"><span id="habitos-feitos">0</span>/<span id="habitos-total">0</span></span>
+        <span>hábitos cumpridos hoje</span>
+      </div>
+      <button class="habitos-reset" onclick="resetHabitos()">Resetar dia</button>
+    </div>
+
+    <div class="habitos-list" id="habitos-list">
+      <!-- Preenchido por JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SUBSTITUICOES ==================== -->
+<section id="swaps">
+  <div class="section-header">
+    <div class="section-eyebrow">Substituições inteligentes</div>
+    <h2 class="section-title">Troco isso por aquilo</h2>
+  </div>
+
+  <div class="swap-grid">
+    <div class="swap-card">
+      <div class="swap-from">Café</div>
+      <div class="swap-arrow">→</div>
+      <div class="swap-to">Chá</div>
+    </div>
+    <div class="swap-card">
+      <div class="swap-from">Doces</div>
+      <div class="swap-arrow">→</div>
+      <div class="swap-to">Frutas</div>
+    </div>
+    <div class="swap-card">
+      <div class="swap-from">Sobremesa</div>
+      <div class="swap-arrow">→</div>
+      <div class="swap-to">Frutas</div>
+    </div>
+    <div class="swap-card">
+      <div class="swap-from">Pão</div>
+      <div class="swap-arrow">→</div>
+      <div class="swap-to">Comida de verdade</div>
+    </div>
+    <div class="swap-card">
+      <div class="swap-from">Refrigerante</div>
+      <div class="swap-arrow">→</div>
+      <div class="swap-to">Água</div>
+    </div>
+    <div class="swap-card">
+      <div class="swap-from">Lanche</div>
+      <div class="swap-arrow">→</div>
+      <div class="swap-to">Refeição</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MARCOS E RECOMPENSAS ==================== -->
+<section id="marcos">
+  <div class="section-header">
+    <div class="section-eyebrow">Marcos & Recompensas</div>
+    <h2 class="section-title">Cada quilo conta. Cada marco se comemora.</h2>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item done">
+      <div class="timeline-marker">97kg</div>
+      <div class="timeline-content">
+        <div class="timeline-meta">
+          <span class="timeline-status done">✓ Conquistado</span>
+          <span class="timeline-date">Outubro 2025</span>
+        </div>
+        <h4>Primeiro marco: -3 kg</h4>
+        <p>Saí dos 100kg pros 97kg. Já comprei a camisa, polo e tênis com os R$ 500 da recompensa.</p>
+        <div class="timeline-recompensa">
+          <span class="recompensa-tag">💰 R$ 500 em roupas ✓</span>
+          <span class="recompensa-tag">✈️ Final de semana em Três Coroas (agendar)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item current">
+      <div class="timeline-marker">94kg</div>
+      <div class="timeline-content">
+        <div class="timeline-meta">
+          <span class="timeline-status current">🎯 Próximo marco</span>
+          <span class="timeline-date">Fevereiro 2026</span>
+        </div>
+        <h4>Segundo marco: -6 kg total</h4>
+        <p>Próximo objetivo. Está logo ali, é só manter o ritmo.</p>
+        <div class="timeline-recompensa">
+          <span class="recompensa-tag">💰 R$ 500</span>
+          <span class="recompensa-tag">✈️ Final de semana em Porto Alegre</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-marker">91kg</div>
+      <div class="timeline-content">
+        <div class="timeline-meta">
+          <span class="timeline-status pending">Em breve</span>
+          <span class="timeline-date">Abril 2026</span>
+        </div>
+        <h4>Terceiro marco: -9 kg total</h4>
+        <p>Reta final. Praticamente lá.</p>
+        <div class="timeline-recompensa">
+          <span class="recompensa-tag">💰 R$ 500</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-marker">90kg</div>
+      <div class="timeline-content">
+        <div class="timeline-meta">
+          <span class="timeline-status pending">A conquista</span>
+          <span class="timeline-date">Junho 2026</span>
+        </div>
+        <h4>O OBJETIVO: 90 kg</h4>
+        <p>Aqui termina essa batalha de anos. E começa uma nova fase: manter.</p>
+        <div class="timeline-recompensa">
+          <span class="recompensa-tag">💰 R$ 500</span>
+          <span class="recompensa-tag">✈️ Final de semana em Gramado</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== INDICADORES DO NEGOCIO ==================== -->
+<section id="indicadores">
+  <div class="section-header">
+    <div class="section-eyebrow">Para a meta 2 · Acompanhar semanalmente</div>
+    <h2 class="section-title">Indicadores da Icehot</h2>
+  </div>
+
+  <div class="indicadores-grid">
+    <div class="indicador">
+      <div class="indicador-icon">🛒</div>
+      <div class="indicador-nome">Vendas</div>
+    </div>
+    <div class="indicador">
+      <div class="indicador-icon">💵</div>
+      <div class="indicador-nome">Faturamento</div>
+    </div>
+    <div class="indicador">
+      <div class="indicador-icon">📈</div>
+      <div class="indicador-nome">Receita</div>
+    </div>
+    <div class="indicador">
+      <div class="indicador-icon">📉</div>
+      <div class="indicador-nome">Despesa</div>
+    </div>
+    <div class="indicador">
+      <div class="indicador-icon">💎</div>
+      <div class="indicador-nome">Margem de lucro</div>
+    </div>
+    <div class="indicador">
+      <div class="indicador-icon">🏦</div>
+      <div class="indicador-nome">Geração de caixa</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PESSOAS DE APOIO ==================== -->
+<section id="apoio">
+  <div class="section-header">
+    <div class="section-eyebrow">Time de apoio</div>
+    <h2 class="section-title">Quem caminha comigo</h2>
+  </div>
+
+  <div class="apoio-grid">
+    <div class="apoio-card">
+      <div class="apoio-avatar">N</div>
+      <h4>Natali</h4>
+      <p>Parceira de responsabilidade no dia a dia</p>
+    </div>
+    <div class="apoio-card">
+      <div class="apoio-avatar">S</div>
+      <h4>Samuel Basso</h4>
+      <p>Mentor + treino ocasional</p>
+    </div>
+    <div class="apoio-card">
+      <div class="apoio-avatar">C</div>
+      <h4>Cleber (Zen)</h4>
+      <p>Café a cada 6 meses</p>
+    </div>
+    <div class="apoio-card">
+      <div class="apoio-avatar">L</div>
+      <h4>Lander</h4>
+      <p>Café a cada 6 meses</p>
+    </div>
+    <div class="apoio-card">
+      <div class="apoio-avatar">C</div>
+      <h4>César (Anderle)</h4>
+      <p>Café a cada 6 meses</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FUTURO ==================== -->
+<div class="futuro" id="futuro">
+  <div class="futuro-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">Visão de futuro</div>
+      <h2 class="section-title">Como será a vida lá na frente</h2>
+    </div>
+
+    <div class="futuro-cards">
+      <div class="futuro-card">
+        <h3>Rotina</h3>
+        <p>Acordo cedo, vou à academia, chego na empresa com energia. Tenho líderes que me ajudam a fazer a Icehot crescer. Tenho tempo pra família, pra Deus, pra cuidar de mim.</p>
+      </div>
+      <div class="futuro-card">
+        <h3>Aparência</h3>
+        <p>Visto qualquer roupa do guarda-roupa. Uso minhas camisas sociais antigas. Tiro foto sem vergonha. Sinto orgulho ao olhar no espelho.</p>
+      </div>
+      <div class="futuro-card">
+        <h3>Família</h3>
+        <p>Levo Natali nos melhores restaurantes. Proporciono ao meu filho experiências incríveis. Construímos nossa casa na Garibaldina.</p>
+      </div>
+      <div class="futuro-card">
+        <h3>Investimentos</h3>
+        <p>Compro terrenos e imóveis na planta. Tenho cartas de consórcio. Continuo escalando a Icehot além dos R$ 50k/mês.</p>
+      </div>
+      <div class="futuro-card">
+        <h3>Liberdade</h3>
+        <p>Viajo de férias 2 a 3 vezes por ano. Pessoa fixa em casa cuidando da limpeza. Não me preocupo mais com dinheiro pra fazer o que quero.</p>
+      </div>
+      <div class="futuro-card">
+        <h3>Legado</h3>
+        <p>Dedico tempo a formar as pessoas que trabalham comigo. Compartilho o que aprendi. Inspiro outros a moverem o ponteiro da própria vida.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <p>Autocoaching de Alex · <strong>Lei do Progresso</strong> em ação · Atualizado semanalmente</p>
+</footer>
+
+<script>
+  // ==================== TEMA ====================
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme');
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('alex-theme', newTheme);
+    document.getElementById('theme-icon').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+  }
+
+  // Aplicar tema salvo
+  (function() {
+    const saved = localStorage.getItem('alex-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+    document.getElementById('theme-icon').textContent = saved === 'dark' ? '☀️' : '🌙';
+  })();
+
+  // ==================== PROGRESSO PESO ====================
+  function carregarPeso() {
+    const peso = parseFloat(localStorage.getItem('alex-peso')) || 97;
+    document.getElementById('peso-atual').textContent = peso;
+    const inicial = 100;
+    const meta = 90;
+    const total = inicial - meta; // 10
+    const progresso = Math.max(0, Math.min(100, ((inicial - peso) / total) * 100));
+    document.getElementById('progress-peso').style.width = progresso + '%';
+    document.getElementById('peso-falta').textContent = Math.max(0, (peso - meta)).toFixed(1).replace('.0', '');
+  }
+
+  function atualizarPeso() {
+    const input = document.getElementById('input-peso');
+    const valor = parseFloat(input.value);
+    if (!isNaN(valor) && valor > 0) {
+      localStorage.setItem('alex-peso', valor);
+      input.value = '';
+      carregarPeso();
+    }
+  }
+
+  // ==================== PROGRESSO RENDA ====================
+  function carregarRenda() {
+    const renda = parseFloat(localStorage.getItem('alex-renda')) || 20;
+    document.getElementById('renda-atual').textContent = renda;
+    const inicial = 20;
+    const meta = 50;
+    const total = meta - inicial; // 30
+    const progresso = Math.max(0, Math.min(100, ((renda - inicial) / total) * 100));
+    document.getElementById('progress-renda').style.width = progresso + '%';
+    document.getElementById('renda-falta').textContent = Math.max(0, (meta - renda)).toFixed(0);
+  }
+
+  function atualizarRenda() {
+    const input = document.getElementById('input-renda');
+    const valor = parseFloat(input.value);
+    if (!isNaN(valor) && valor > 0) {
+      localStorage.setItem('alex-renda', valor);
+      input.value = '';
+      carregarRenda();
+    }
+  }
+
+  // ==================== HABITOS DIARIOS ====================
+  const HABITOS = [
+    { id: 'treino', texto: '💪 Treinei hoje' },
+    { id: 'cardio', texto: '🏃 Fiz 30min de cardio' },
+    { id: 'agua', texto: '💧 Bebi bastante água' },
+    { id: 'alimentacao', texto: '🥗 Comi limpo (sem doces/frituras)' },
+    { id: 'sono', texto: '😴 Dormi às 22:30' },
+    { id: 'prioridades', texto: '🎯 Listei minhas prioridades' },
+    { id: 'autocoaching', texto: '📖 Li meu autocoaching' },
+    { id: 'natali', texto: '🤝 Atualizei a Natali sobre o progresso' }
+  ];
+
+  function getHoje() {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  function carregarHabitos() {
+    const hoje = getHoje();
+    const salvos = JSON.parse(localStorage.getItem(`alex-habitos-${hoje}`) || '{}');
+    const container = document.getElementById('habitos-list');
+    container.innerHTML = '';
+
+    HABITOS.forEach(h => {
+      const item = document.createElement('div');
+      item.className = 'habito-item' + (salvos[h.id] ? ' checked' : '');
+      item.onclick = () => toggleHabito(h.id);
+      item.innerHTML = `
+        <div class="habito-checkbox"></div>
+        <div class="habito-texto">${h.texto}</div>
+      `;
+      container.appendChild(item);
+    });
+
+    document.getElementById('habitos-total').textContent = HABITOS.length;
+    atualizarContadorHabitos();
+  }
+
+  function toggleHabito(id) {
+    const hoje = getHoje();
+    const key = `alex-habitos-${hoje}`;
+    const salvos = JSON.parse(localStorage.getItem(key) || '{}');
+    salvos[id] = !salvos[id];
+    localStorage.setItem(key, JSON.stringify(salvos));
+    carregarHabitos();
+  }
+
+  function atualizarContadorHabitos() {
+    const hoje = getHoje();
+    const salvos = JSON.parse(localStorage.getItem(`alex-habitos-${hoje}`) || '{}');
+    const feitos = Object.values(salvos).filter(v => v).length;
+    document.getElementById('habitos-feitos').textContent = feitos;
+  }
+
+  function resetHabitos() {
+    if (confirm('Resetar todos os hábitos de hoje?')) {
+      const hoje = getHoje();
+      localStorage.removeItem(`alex-habitos-${hoje}`);
+      carregarHabitos();
+    }
+  }
+
+  // ==================== INIT ====================
+  document.addEventListener('DOMContentLoaded', () => {
+    carregarPeso();
+    carregarRenda();
+    carregarHabitos();
+  });
+</script>
+
+</body>
+</html>
