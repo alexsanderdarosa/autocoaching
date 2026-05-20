@@ -221,6 +221,79 @@
     margin-bottom: 0.5rem;
   }
 
+  /* ===== Mural de Sonhos ===== */
+  .mural {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 2rem 4rem;
+    position: relative;
+  }
+
+  .mural-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .mural-eyebrow {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--azul-royal);
+    margin-bottom: 0.75rem;
+  }
+
+  .mural-title {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .mural-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--azul-royal);
+  }
+
+  .mural-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 300;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .mural-frame {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(15, 5, 241, 0.2);
+    border: 1px solid var(--border);
+    transition: all 0.4s ease;
+  }
+
+  .mural-frame:hover {
+    transform: scale(1.01);
+    box-shadow: 0 24px 80px rgba(15, 5, 241, 0.3);
+  }
+
+  .mural-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .mural-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 70%, rgba(0, 30, 97, 0.15) 100%);
+    pointer-events: none;
+    border-radius: 20px;
+  }
+
   /* ===== Section base ===== */
   section {
     padding: 5rem 2rem;
@@ -1156,6 +1229,18 @@
     Foco nos hábitos, não nos resultados. Se eu fizer o básico, com frequência, vou ter o resultado que desejo.
   </div>
 </header>
+
+<!-- ==================== MURAL DE SONHOS ==================== -->
+<section class="mural">
+  <div class="mural-header">
+    <div class="mural-eyebrow">Visão materializada</div>
+    <h2 class="mural-title">Meu <em>Mural de Sonhos</em></h2>
+    <p class="mural-subtitle">A vida que estou construindo. Tudo que faço hoje aponta pra cá.</p>
+  </div>
+  <div class="mural-frame">
+    <img src="mural-de-sonhos.png" alt="Mural de Sonhos do Alex">
+  </div>
+</section>
 
 <!-- ==================== PAINEL DE METAS ==================== -->
 <section id="metas">
